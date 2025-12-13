@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SXM xmlns="http://www.jsxm.org/schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CoffeeMachine" xsi:schemaLocation="http://www.jsxm.org/schema http://www.jsxm.org/schema/specification.xsd">
+  <!--The below model is not a Stream X Machine thus it can not
+      be compiled and produce test cases. It serves as an abstract example in order to provide
+      a good insight of how a Stream X machine can be described using the below language.
+  -->
+  <!--Dependencies definition-->
+  <dependencies>
+    <!--A Stream X Machine can contain many dependencies.
+        The dependencies declared must be available in the spec folder.
+        Dependencies are optional. 
+        The element dependencies must be removed 
+        in case it will not be used since the application will try to locate a Stream X-Machine. 
+    -->
+    <uses sxm="" />
+  </dependencies>
+  <!--States definition-->
+  <states>
+    <!--A state has a unique name that describes the current state.
+        A Stream X Machine can contain many states.
+    -->
+    <state name="" />
+  </states>
+  <!--Initial State definition-->
+  <!--Initial state must be one of the declared states.
+        A Stream X Machine can contain only one initial state.
+  -->  
+  <initialState state=""/>
+
+  <!--Transitions definition-->
+  <transitions>
+    <!--A transition is using a function and connects 2 states.
+         Attributes from, to and function must be valid names of states and functions respectively.
+        A Stream X Machine can contain many transitions.
+    -->
+    <transition from="" function="" to="" />
+  </transitions>
+  <!--A Stream X machine has only one memory and the additional options-->
+  <!--Memory definition-->
+  <memory>
+    <declaration />
+    <initial />
+    <display />
+  </memory>
+  <!--Methods definition-->
+  <methods />
+  <!--Inputs definition-->
+  <inputs>
+    <!--An input can be used by various functions.
+        An input is consumed by a function of the Stream X machine.
+        A Stream X Machine can contain many inputs.
+    -->
+    <input name="" />
+  </inputs>
+  <!--Outputs definition-->
+  <outputs>
+    <!--An output can be used by various functions.
+        An output is the result of a function when an input is consumed
+        and produces desired behavior.
+        A Stream X Machine can contain many outputs.
+    -->
+    <output name="" />
+  </outputs>
+  <!--Faults definition-->
+  <faults>
+    <!--A fault can be used by various functions.
+         A fault is the result of a function when an input is consumed
+        and produces unexpected behavior
+        A Stream X Machine can contain many faults.
+    -->
+    <fault name="" />
+  </faults>
+  <!--JSXMUtilities definition-->
+  <functions>
+    <!--A function is using inputs and outputs and is described by a name.
+         The input and output of a function must be valid names of inputs and outputs respectively.
+         A function can be of type OutputFunction or FaultFunction depending on usage.
+         A Stream X Machine can contain many functions. Preconditions and effect are optional.
+    -->
+    <function name="" input="" output="" xsi:type="OutputFunction" />
+    <function name="faultFunction" input="" fault="" xsi:type="FaultFunction">
+      <precondition />
+      <effect />
+    </function>
+  </functions>
+  <!--Test Input Generation definition-->
+  <testinputgeneration>
+    <!--An inputgenerator uses a function and the function must be one
+        of the available functions. A Stream X Machine can contain many input generators.
+    -->
+    <inputgenerator function="" />
+  </testinputgeneration>
+</SXM>

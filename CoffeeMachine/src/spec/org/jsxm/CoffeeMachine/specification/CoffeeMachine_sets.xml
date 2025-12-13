@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sets xmlns="http://www.jsxm.org/schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.jsxm.org/schema http://www.jsxm.org/schema/sets.xsd">
+  <!--Characterization definition-->
+  <characterization>
+    <sequence>
+      <function name="" />
+    </sequence>
+  </characterization>
+  <!--StateCover definition-->
+  <statecover>
+    <sequence>
+      <function name="" />
+    </sequence>
+  </statecover>
+</sets>
+

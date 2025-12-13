@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jsxm.CoffeeMachine</groupId>
+	<artifactId>CoffeeMachine</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>jsxm-quickstart</name>
+	<url>http://www.jsxm.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<releases>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<id>jsxm</id>
+			<name>JSXM Model Based Testing</name>
+			<url>http://www.jsxm.org/maven2/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jsxm.maven.plugin</groupId>
+				<artifactId>jsxm-maven-plugin</artifactId>
+				<version>1.4.11-RC2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<description>The archetype provides the pox.xml settings for the successful execution of JSXM maven plugin.
+
+Furthermore the archetype generates the folder structure and an abstract example in order to provide a good insight of how an Stream X machine can be described using the JSXM language. 
+
+The Quickstart.xml and Quickstart_sets.xml are loacated inside the src/spec/org/jsxm/examples/Quickstart/specification. The spec folder is automatically added in the classpath as a classpathentry and is treated as a source folder in order to provide quick navigation in the example.</description>
+</project>
