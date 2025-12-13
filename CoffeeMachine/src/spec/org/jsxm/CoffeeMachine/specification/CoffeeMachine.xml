@@ -1,93 +1,276 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SXM xmlns="http://www.jsxm.org/schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CoffeeMachine" xsi:schemaLocation="http://www.jsxm.org/schema http://www.jsxm.org/schema/specification.xsd">
-  <!--The below model is not a Stream X Machine thus it can not
-      be compiled and produce test cases. It serves as an abstract example in order to provide
-      a good insight of how a Stream X machine can be described using the below language.
-  -->
-  <!--Dependencies definition-->
-  <dependencies>
-    <!--A Stream X Machine can contain many dependencies.
-        The dependencies declared must be available in the spec folder.
-        Dependencies are optional. 
-        The element dependencies must be removed 
-        in case it will not be used since the application will try to locate a Stream X-Machine. 
-    -->
-    <uses sxm="" />
-  </dependencies>
-  <!--States definition-->
-  <states>
-    <!--A state has a unique name that describes the current state.
-        A Stream X Machine can contain many states.
-    -->
-    <state name="" />
-  </states>
-  <!--Initial State definition-->
-  <!--Initial state must be one of the declared states.
-        A Stream X Machine can contain only one initial state.
-  -->  
-  <initialState state=""/>
 
-  <!--Transitions definition-->
+  <states>
+    <state name="poweredOff" />
+    <state name="uninitialized" />
+    <state name="idle" />
+    <state name="creditAvailable" />
+  </states>
+
+  <initialState state="poweredOff"/>
+
   <transitions>
-    <!--A transition is using a function and connects 2 states.
-         Attributes from, to and function must be valid names of states and functions respectively.
-        A Stream X Machine can contain many transitions.
-    -->
-    <transition from="" function="" to="" />
+    <transition from="poweredOff" function="powerOn" to="uninitialized" />
+    <transition from="poweredOff" function="powerOn" to="idle" />
+    <transition from="poweredOff" function="powerOn" to="creditAvailable" />
+
+    <transition from="uninitialized" function="powerOff" to="poweredOff" />
+    <transition from="uninitialized" function="setPrice" to="idle" />
+
+    <transition from="idle" function="powerOff" to="poweredOff" />
+    <transition from="idle" function="setPrice" to="idle" />
+    <transition from="idle" function="addCredit" to="creditAvailable" />
+
+    <transition from="creditAvailable" function="powerOff" to="poweredOff" />
+    <transition from="creditAvailable" function="setPrice" to="creditAvailable" />
+    <transition from="creditAvailable" function="addCredit" to="creditAvailable" />
+    <transition from="creditAvailable" function="buyCoffeeN" to="creditAvailable" />
+    <transition from="creditAvailable" function="buyCoffee0" to="idle" />
+
+
+
+    <transition from="poweredOff" function="powerOffAlreadyOff" to="poweredOff"/>
+    <transition from="poweredOff" function="setPricePoweredOff" to="poweredOff"/>
+    <transition from="poweredOff" function="addCreditPoweredOff" to="poweredOff"/>
+    <transition from="poweredOff" function="buyCoffeePoweredOff" to="poweredOff"/>
+
+    <transition from="uninitialized" function="powerOnAlreadyOn" to="uninitialized"/>
+    <transition from="uninitialized" function="setPriceInvalidValue" to="uninitialized" />
+    <transition from="uninitialized" function="addCreditPriceNotSet" to="uninitialized"/>
+    <transition from="uninitialized" function="buyCoffeePriceNotSet" to="uninitialized"/>
+
+    <transition from="idle" function="powerOnAlreadyOn" to="idle"/>
+    <transition from="idle" function="setPriceInvalidValue" to="idle"/>
+    <transition from="idle" function="addCreditPriceNotSet" to="uninitialized"/>
+    <transition from="idle" function="addCreditInvalidValue" to="idle"/>
+    <transition from="idle" function="buyCoffeePriceNotSet" to="uninitialized"/>
+    <transition from="idle" function="buyCoffeeInvalidType" to="idle"/>
+    <transition from="idle" function="buyCoffeeInsufficientCredit" to="idle"/>
+
+    <transition from="creditAvailable" function="powerOnAlreadyOn" to="creditAvailable"/>
+    <transition from="creditAvailable" function="setPriceInvalidValue" to="creditAvailable"/>
+    <transition from="creditAvailable" function="addCreditPriceNotSet" to="uninitialized"/>
+    <transition from="creditAvailable" function="addCreditInvalidValue" to="creditAvailable"/>
+    <transition from="creditAvailable" function="buyCoffeePriceNotSet" to="uninitialized"/>
+    <transition from="creditAvailable" function="buyCoffeeInvalidType" to="creditAvailable"/>
+    <transition from="creditAvailable" function="buyCoffeeInsufficientCredit" to="creditAvailable"/>
   </transitions>
-  <!--A Stream X machine has only one memory and the additional options-->
-  <!--Memory definition-->
+
   <memory>
-    <declaration />
-    <initial />
-    <display />
+    <declaration> boolean isPoweredOn; int espressoPrice; int cappuccinoPrice; int credit; </declaration>
+    <initial> isPoweredOn = false; espressoPrice = 0; cappuccinoPrice = 0; credit = 0; </initial>
+    <display> "Machine is " + (isPoweredOn ? "ON" : "OFF") + ", Espresso Price: " + espressoPrice + ", Cappuccino Price: " + cappuccinoPrice + ", Credit: " + credit </display>
   </memory>
-  <!--Methods definition-->
-  <methods />
-  <!--Inputs definition-->
+
   <inputs>
-    <!--An input can be used by various functions.
-        An input is consumed by a function of the Stream X machine.
-        A Stream X Machine can contain many inputs.
-    -->
-    <input name="" />
+    <input name="powerOn" />
+
+    <input name="powerOff" />
+
+    <input name="setPrice">
+      <arg name="espressoPrice" type="xs:int" />
+      <arg name="cappuccinoPrice" type="xs:int" />
+    </input>
+
+    <input name="addCredit">
+      <arg name="amount" type="xs:int" />
+    </input>
+
+    <input name="buyCoffee">
+      <arg name="coffeeType" type="xs:string" />
+    </input>
   </inputs>
-  <!--Outputs definition-->
+
   <outputs>
-    <!--An output can be used by various functions.
-        An output is the result of a function when an input is consumed
-        and produces desired behavior.
-        A Stream X Machine can contain many outputs.
-    -->
-    <output name="" />
+    <output name="powerOnOut">
+      <result name="isPoweredOn" type="xs:boolean" />
+      <result name="message" type="xs:string" />
+    </output>
+
+    <output name="powerOffOut">
+      <result name="isPoweredOn" type="xs:boolean"/>
+      <result name="message" type="xs:string"/>
+    </output>
+
+    <output name="setPriceOut">
+      <result name="newEspressoPrice" type="xs:int" />
+      <result name="newCappuccinoPrice" type="xs:int" />
+      <result name="message" type="xs:string"/>
+    </output>
+
+    <output name="addCreditOut">
+      <result name="newCredit" type="xs:int" />
+      <result name="message" type="xs:string"/>
+    </output>
+
+    <output name="buyCoffeeOut">
+      <result name="coffeeTypeDispensed" type="xs:string" />
+      <result name="remainingCredit" type="xs:int" />
+      <result name="message" type="xs:string"/>
+    </output>
   </outputs>
-  <!--Faults definition-->
+
   <faults>
-    <!--A fault can be used by various functions.
-         A fault is the result of a function when an input is consumed
-        and produces unexpected behavior
-        A Stream X Machine can contain many faults.
-    -->
-    <fault name="" />
+    <fault name="powerOnAlreadyOnError" />
+
+    <fault name="powerOffAlreadyOffError" />
+
+    <fault name="setPricePoweredOffError" />
+    <fault name="setPriceInvalidValueError" />
+
+    <fault name="addCreditPoweredOffError"/>
+    <fault name="addCreditPriceNotSetError"/>
+    <fault name="addCreditInvalidValueError" />
+
+    <fault name="buyCoffeePoweredOffError"/>
+    <fault name="buyCoffeePriceNotSetError" />
+    <fault name="buyCoffeeInvalidTypeError" />
+    <fault name="buyCoffeeInsufficientCreditError" />
   </faults>
-  <!--JSXMUtilities definition-->
+
   <functions>
-    <!--A function is using inputs and outputs and is described by a name.
-         The input and output of a function must be valid names of inputs and outputs respectively.
-         A function can be of type OutputFunction or FaultFunction depending on usage.
-         A Stream X Machine can contain many functions. Preconditions and effect are optional.
-    -->
-    <function name="" input="" output="" xsi:type="OutputFunction" />
-    <function name="faultFunction" input="" fault="" xsi:type="FaultFunction">
-      <precondition />
-      <effect />
+    <function name="powerOn" input="powerOn" output="powerOnOut" xsi:type="OutputFunction">
+        <precondition> ! isPoweredOn </precondition>
+        <effect>
+            isPoweredOn = true;
+            powerOnOut.isPoweredOn = isPoweredOn;
+            powerOnOut.message = "Coffee Machine powered ON";
+        </effect>
+    </function>
+
+    <function name="powerOff" input="powerOff" output="powerOffOut" xsi:type="OutputFunction">
+        <precondition> isPoweredOn </precondition>
+        <effect>
+            isPoweredOn = false;
+            powerOffOut.isPoweredOn = isPoweredOn;
+            powerOffOut.message = "Coffee Machine powered OFF";
+        </effect>
+    </function>
+
+    <function name="setPrice" input="setPrice" output="setPriceOut" xsi:type="OutputFunction">
+      <precondition>
+        setPrice.get_espressoPrice() &gt; 0 &amp;&amp;
+        setPrice.get_cappuccinoPrice() &gt; 0
+      </precondition>
+      <effect>
+        espressoPrice = setPrice.get_espressoPrice();
+        cappuccinoPrice = setPrice.get_cappuccinoPrice();
+        setPriceOut.newEspressoPrice = espressoPrice;
+        setPriceOut.newCappuccinoPrice = cappuccinoPrice;
+        setPriceOut.message = "Prices set: Espresso - " + espressoPrice + ", Cappuccino - " + cappuccinoPrice;
+      </effect>
+    </function>
+
+    <function name="addCredit" input="addCredit" output="addCreditOut" xsi:type="OutputFunction">
+      <precondition>
+        isPoweredOn &amp;&amp;
+        (addCredit.get_amount() == 1 || addCredit.get_amount() == 5 || addCredit.get_amount() == 10 || addCredit.get_amount() == 20)
+      </precondition>
+      <effect>
+        credit += addCredit.get_amount();
+        addCreditOut.newCredit = credit;
+        addCreditOut.message = "Credit added: " + addCredit.get_amount() + ". Total credit: " + credit;
+      </effect>
+    </function>
+
+    <function name="buyCoffeeN" input="buyCoffee" output="buyCoffeeOut" xsi:type="OutputFunction">
+      <precondition>
+        isPoweredOn &amp;&amp;
+        (buyCoffee.get_coffeeType() == "espresso" || buyCoffee.get_coffeeType() == "cappuccino") &amp;&amp;
+        credit > (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice)
+      </precondition>
+      <effect>
+        credit -= (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice);
+        buyCoffeeOut.coffeeTypeDispensed = buyCoffee.get_coffeeType();
+        buyCoffeeOut.remainingCredit = credit;
+        buyCoffeeOut.message = "Coffee dispensed: " + buyCoffeeOut.coffeeTypeDispensed + ". Remaining credit: " + buyCoffeeOut.remainingCredit;
+      </effect>
+    </function>
+
+    <function name="buyCoffee0" input="buyCoffee" output="buyCoffeeOut" xsi:type="OutputFunction">
+      <precondition>
+        isPoweredOn &amp;&amp;
+        (buyCoffee.get_coffeeType() == "espresso" || buyCoffee.get_coffeeType() == "cappuccino") &amp;&amp;
+        credit == (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice)
+      </precondition>
+      <effect>
+        credit -= (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice);
+        buyCoffeeOut.coffeeTypeDispensed = buyCoffee.get_coffeeType();
+        buyCoffeeOut.remainingCredit = credit;
+        buyCoffeeOut.message = "Coffee dispensed: " + buyCoffeeOut.coffeeTypeDispensed + ". Remaining credit: " + buyCoffeeOut.remainingCredit;
+      </effect>
+    </function>
+
+
+
+    <function name="powerOnAlreadyOn" input="powerOn" fault="powerOnAlreadyOnError" xsi:type="FaultFunction">
+      <precondition> isPoweredOn </precondition>
+    </function>
+
+    <function name="powerOffAlreadyOff" input="powerOff" fault="powerOffAlreadyOffError" xsi:type="FaultFunction">
+      <precondition> ! isPoweredOn </precondition>
+    </function>
+
+    <function name="setPricePoweredOff" input="setPrice" fault="setPricePoweredOffError" xsi:type="FaultFunction">
+      <precondition> ! isPoweredOn </precondition>
+    </function>
+
+    <function name="setPriceInvalidValue" input="setPrice" fault="setPriceInvalidValueError" xsi:type="FaultFunction">
+      <precondition> ! (setPrice.get_espressoPrice() &gt; 0 &amp;&amp; setPrice.get_cappuccinoPrice() &gt; 0) </precondition>
+    </function>
+
+    <function name="addCreditPoweredOff" input="addCredit" fault="addCreditPoweredOffError" xsi:type="FaultFunction">
+      <precondition> ! isPoweredOn </precondition>
+    </function>
+
+    <function name="addCreditPriceNotSet" input="addCredit" fault="addCreditPriceNotSetError" xsi:type="FaultFunction">
+      <precondition> espressoPrice == 0 &amp;&amp; cappuccinoPrice == 0 </precondition>
+    </function>
+
+    <function name="addCreditInvalidValue" input="addCredit" fault="addCreditInvalidValueError" xsi:type="FaultFunction">
+      <precondition> ! (addCredit.get_amount() == 1 || addCredit.get_amount() == 5 || addCredit.get_amount() == 10 || addCredit.get_amount() == 20) </precondition>
+    </function>
+
+    <function name="buyCoffeePoweredOff" input="buyCoffee" fault="buyCoffeePoweredOffError" xsi:type="FaultFunction">
+      <precondition> ! isPoweredOn </precondition>
+    </function>
+
+    <function name="buyCoffeePriceNotSet" input="buyCoffee" fault="buyCoffeePriceNotSetError" xsi:type="FaultFunction">
+      <precondition> espressoPrice == 0 &amp;&amp; cappuccinoPrice == 0 </precondition>
+    </function>
+
+    <function name="buyCoffeeInvalidType" input="buyCoffee" fault="buyCoffeeInvalidTypeError" xsi:type="FaultFunction">
+      <precondition> ! (buyCoffee.get_coffeeType() == "espresso" || buyCoffee.get_coffeeType() == "cappuccino") </precondition>
+    </function>
+
+    <function name="buyCoffeeInsufficientCredit" input="buyCoffee" fault="buyCoffeeInsufficientCreditError" xsi:type="FaultFunction">
+      <precondition> credit &lt; (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice) </precondition>
     </function>
   </functions>
+
   <!--Test Input Generation definition-->
   <testinputgeneration>
     <!--An inputgenerator uses a function and the function must be one
         of the available functions. A Stream X Machine can contain many input generators.
     -->
-    <inputgenerator function="" />
+    <inputgenerator function="powerOn"> powerOn(); </inputgenerator>
+    <inputgenerator function="powerOff"> powerOff(); </inputgenerator>
+    <inputgenerator function="setPrice"> setPrice.set_espressoPrice(10); setPrice.set_cappuccinoPrice(15); </inputgenerator>
+    <inputgenerator function="addCredit"> addCredit.set_amount(10); </inputgenerator>
+    <inputgenerator function="buyCoffeeN"> buyCoffee.set_coffeeType("espresso"); </inputgenerator>
+    <inputgenerator function="buyCoffee0"> buyCoffee.set_coffeeType("cappuccino"); </inputgenerator>
+
+    <inputgenerator function="powerOnAlreadyOn"> powerOn(); </inputgenerator>
+    <inputgenerator function="powerOffAlreadyOff"> powerOff(); </inputgenerator>
+    <inputgenerator function="setPricePoweredOff"> setPrice.set_espressoPrice(10); setPrice.set_cappuccinoPrice(15); </inputgenerator>
+    <inputgenerator function="setPriceInvalidValue"> setPrice.set_espressoPrice(0); setPrice.set_cappuccinoPrice(-5); </inputgenerator>
+    <inputgenerator function="addCreditPoweredOff"> addCredit.set_amount(10); </inputgenerator>
+    <inputgenerator function="addCreditPriceNotSet"> addCredit.set_amount(10); </inputgenerator>
+    <inputgenerator function="addCreditInvalidValue"> addCredit.set_amount(3); </inputgenerator>
+    <inputgenerator function="buyCoffeePoweredOff"> buyCoffee.set_coffeeType("espresso"); </inputgenerator>
+    <inputgenerator function="buyCoffeePriceNotSet"> buyCoffee.set_coffeeType("cappuccino"); </inputgenerator>
+    <inputgenerator function="buyCoffeeInvalidType"> buyCoffee.set_coffeeType("latte"); </inputgenerator>
+    <inputgenerator function="buyCoffeeInsufficientCredit"> buyCoffee.set_coffeeType("espresso"); </inputgenerator>
   </testinputgeneration>
 </SXM>
