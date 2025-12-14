@@ -3,13 +3,36 @@
   <!--Characterization definition-->
   <characterization>
     <sequence>
-      <function name="" />
+      <function name="powerOn" />
+    </sequence>
+    <sequence>
+      <function name="setPrice" />
+    </sequence>
+    <sequence>
+      <function name="addCredit" />
     </sequence>
   </characterization>
   <!--StateCover definition-->
   <statecover>
+    <!--poweredOff-->
+    <sequence />
+
+    <!--poweredOff -> uninitialized-->
     <sequence>
-      <function name="" />
+      <function name="powerOn" />
+    </sequence>
+
+    <!--poweredOff -> uninitialized -> idle -->
+    <sequence>
+      <function name="powerOn" />
+      <function name="setPrice" />
+    </sequence>
+
+    <!--poweredOff -> uninitialized -> idle -> creditAvailable-->
+    <sequence>
+      <function name="powerOn" />
+      <function name="setPrice" />
+      <function name="addCredit" />
     </sequence>
   </statecover>
 </sets>

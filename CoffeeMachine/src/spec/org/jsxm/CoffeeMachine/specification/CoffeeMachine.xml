@@ -12,8 +12,8 @@
 
   <transitions>
     <transition from="poweredOff" function="powerOn" to="uninitialized" />
-    <transition from="poweredOff" function="powerOn" to="idle" />
-    <transition from="poweredOff" function="powerOn" to="creditAvailable" />
+    <transition from="poweredOff" function="powerOnIdle" to="idle" />
+    <transition from="poweredOff" function="powerOnCreditAvailable" to="creditAvailable" />
 
     <transition from="uninitialized" function="powerOff" to="poweredOff" />
     <transition from="uninitialized" function="setPrice" to="idle" />
@@ -131,7 +131,7 @@
 
   <functions>
     <function name="powerOn" input="powerOn" output="powerOnOut" xsi:type="OutputFunction">
-        <precondition> ! isPoweredOn </precondition>
+        <precondition> ! isPoweredOn  &amp;&amp; espressoPrice == 0 &amp;&amp; cappuccinoPrice == 0 &amp;&amp; credit == 0 </precondition>
         <effect>
             isPoweredOn = true;
             powerOnOut.isPoweredOn = isPoweredOn;
@@ -139,6 +139,23 @@
         </effect>
     </function>
 
+    <function name="powerOnIdle" input="powerOn" output="powerOnOut" xsi:type="OutputFunction">
+        <precondition> ! isPoweredOn  &amp;&amp; ! (espressoPrice == 0 || cappuccinoPrice == 0) &amp;&amp; credit == 0 </precondition>
+        <effect>
+            isPoweredOn = true;
+            powerOnOut.isPoweredOn = isPoweredOn;
+            powerOnOut.message = "Coffee Machine powered ON";
+        </effect>
+    </function>
+
+    <function name="powerOnCreditAvailable" input="powerOn" output="powerOnOut" xsi:type="OutputFunction">
+        <precondition> ! isPoweredOn  &amp;&amp; ! (espressoPrice == 0 || cappuccinoPrice == 0) &amp;&amp; credit &gt; 0 </precondition>
+        <effect>
+            isPoweredOn = true;
+            powerOnOut.isPoweredOn = isPoweredOn;
+            powerOnOut.message = "Coffee Machine powered ON";
+        </effect>
+    </function>
     <function name="powerOff" input="powerOff" output="powerOffOut" xsi:type="OutputFunction">
         <precondition> isPoweredOn </precondition>
         <effect>
@@ -245,7 +262,7 @@
     </function>
 
     <function name="buyCoffeeInsufficientCredit" input="buyCoffee" fault="buyCoffeeInsufficientCreditError" xsi:type="FaultFunction">
-      <precondition> credit &lt; (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice) </precondition>
+      <precondition> (buyCoffee.get_coffeeType() == "espresso" || buyCoffee.get_coffeeType() == "cappuccino") &amp;&amp; credit &lt; (buyCoffee.get_coffeeType() == "espresso" ? espressoPrice : cappuccinoPrice) </precondition>
     </function>
   </functions>
 
@@ -254,15 +271,11 @@
     <!--An inputgenerator uses a function and the function must be one
         of the available functions. A Stream X Machine can contain many input generators.
     -->
-    <inputgenerator function="powerOn"> powerOn(); </inputgenerator>
-    <inputgenerator function="powerOff"> powerOff(); </inputgenerator>
     <inputgenerator function="setPrice"> setPrice.set_espressoPrice(10); setPrice.set_cappuccinoPrice(15); </inputgenerator>
     <inputgenerator function="addCredit"> addCredit.set_amount(10); </inputgenerator>
     <inputgenerator function="buyCoffeeN"> buyCoffee.set_coffeeType("espresso"); </inputgenerator>
     <inputgenerator function="buyCoffee0"> buyCoffee.set_coffeeType("cappuccino"); </inputgenerator>
-
-    <inputgenerator function="powerOnAlreadyOn"> powerOn(); </inputgenerator>
-    <inputgenerator function="powerOffAlreadyOff"> powerOff(); </inputgenerator>
+    
     <inputgenerator function="setPricePoweredOff"> setPrice.set_espressoPrice(10); setPrice.set_cappuccinoPrice(15); </inputgenerator>
     <inputgenerator function="setPriceInvalidValue"> setPrice.set_espressoPrice(0); setPrice.set_cappuccinoPrice(-5); </inputgenerator>
     <inputgenerator function="addCreditPoweredOff"> addCredit.set_amount(10); </inputgenerator>
