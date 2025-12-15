@@ -131,3 +131,6 @@
 
 # JSXM logs
 **/jsxmLogs/
+
+# macOS
+**/.DS_Store
