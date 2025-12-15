@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.jsxm.VendingMachine</groupId>
-	<artifactId>VendingMachine</artifactId>
+	<groupId>org.jsxm.CoffeeMachine</groupId>
+	<artifactId>CoffeeMachine</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
@@ -66,9 +66,9 @@
 		</plugins>
 	</build>
 
-	<description>The archetype provides the pox.xml settings for the successful execution of JSXM maven plugin.
+	<description>The archetype provides the pom.xml settings for the successful execution of JSXM maven plugin.
 
-Furthermore the archetype generates the folder structure and an abstract example in order to provide a good insight of how an Stream X machine can be described using the JSXM language. 
+Furthermore, the archetype generates the folder structure and an abstract example in order to provide a good insight of how a Stream X machine can be described using the JSXM language.
 
-The Quickstart.xml and Quickstart_sets.xml are loacated inside the src/spec/org/jsxm/examples/Quickstart/specification. The spec folder is automatically added in the classpath as a classpathentry and is treated as a source folder in order to provide quick navigation in the example.</description>
+The Quickstart.xml and Quickstart_sets.xml are located inside the src/spec/org/jsxm/examples/Quickstart/specification. The spec folder is automatically added in the classpath as a classpath entry and is treated as a source folder in order to provide quick navigation in the example.</description>
 </project>
